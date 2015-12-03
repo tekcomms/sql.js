@@ -1,8 +1,10 @@
 # Need $(EMSCRIPTEN), for example run with        emmake make
 
+SHELL=C:/Windows/System32/cmd.exe
+
 EMSCRIPTEN?=/usr/bin
 
-EMCC=$(EMSCRIPTEN)/emcc
+EMCC=emcc
 
 CFLAGS=-DSQLITE_OMIT_LOAD_EXTENSION -DSQLITE_DISABLE_LFS -DLONGDOUBLE_TYPE=double -DSQLITE_INT64_TYPE="long long int" -DSQLITE_THREADSAFE=0
 
@@ -34,8 +36,8 @@ js/worker.js: coffee/worker.coffee
 js/worker.sql.js: js/sql.js js/worker.js
 	cat $^ > $@
 
+# Generate llvm bitcode
 c/sqlite3.bc: c/sqlite3.c
-	# Generate llvm bitcode
 	$(EMCC) $(CFLAGS) c/sqlite3.c -o c/sqlite3.bc
 
 module.tar.gz: test package.json AUTHORS README.md js/sql.js
